@@ -1,6 +1,6 @@
-##Cancer survival 27-28 March – 2017
-##EASP-GRANADA
-##Age-Standardised Net Survival: Cohort and period analysis for population-based cancer epidemiology
+##Cancer survival 27-28 March – 2017  
+##EASP-GRANADA  
+##Age-Standardised Net Survival: Cohort and period analysis for population-based cancer epidemiology  
 
 Event rates often differ widely with age, and comparison of overall (all‐ages) rates between two or more populations can be misleading
 if the age structure of the populations is also very different. Age standardisation is designed to produce an overall summary measure
@@ -37,4 +37,4 @@ We will also show illustrations for short-term and long-term survival prediction
         Registry data. Eur J Cancer 2004; 40: 1361-1372.  
 12.	Henderson R, Jones M, Stare J. Accuracy of point predictions in survival analysis. Stat Med 2001; 20: 3083-3096.  
 
-#Thank you for your attention.  
+#Thank you for your attention.   
