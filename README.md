@@ -1,12 +1,12 @@
-##Cancer survival 27-28 March – 2017  
-##EASP-GRANADA  
-##Age-Standardised Net Survival: Cohort and period analysis for population-based cancer epidemiology  
+# Cancer survival 27-28 March – 2017  
+## EASP-GRANADA  
+## Age-Standardised Net Survival: Cohort and period analysis for population-based cancer epidemiology  
 
 Event rates often differ widely with age, and comparison of overall (all‐ages) rates between two or more populations can be misleading
 if the age structure of the populations is also very different. Age standardisation is designed to produce an overall summary measure
 for each population while removing the effect of differences in age structure that may compromise the comparison of raw (not age‐standardised) rates.  
  
-In this session, we will introduce the principle of age‐standardisation and explain how an age-standardised survival value can be calculated.
+In this session, we will introduce the principle of age standardisation and explain how an age-standardised survival value can be calculated.
 Limitations of the age‐standardisation method and the choice of age‐specific standard weights will be discussed.   
 
 Monitoring of cancer survival should be as up-to-date as possible. Twenty years ago, the principle of period analysis was introduced for deriving 
@@ -15,7 +15,7 @@ software, period analysis has become increasingly popular in recent years. The p
 its use for deriving cancer survival estimates for patients recently diagnosed with a cancer. Furthermore, the cohort analysis will be presented too.
 We will also show illustrations for short-term and long-term survival prediction obtained by modelling the effect of year of diagnosis.  
 
-#Suggestions for further reading  
+# Suggestions for further reading  
 
 1.	Corazziari I, Quinn M, Capocaccia R. Standard cancer patient population for age standardising survival ratios. Eur J Cancer 2004;40:2307‐2316.   
 2.	Capocaccia R, Gatta G, Roazzi P, Carrani E, Santaquilani M, De Angelis R, Tavilla R, EUROCARE Working Group. The EUROCARE‐3 database: 
@@ -37,5 +37,5 @@ We will also show illustrations for short-term and long-term survival prediction
         Registry data. Eur J Cancer 2004; 40: 1361-1372.  
 12.	Henderson R, Jones M, Stare J. Accuracy of point predictions in survival analysis. Stat Med 2001; 20: 3083-3096.  
 
-#Thank you for your attention.   
+# Thank you for your attention.   
 
