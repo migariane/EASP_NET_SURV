@@ -38,3 +38,4 @@ We will also show illustrations for short-term and long-term survival prediction
 12.	Henderson R, Jones M, Stare J. Accuracy of point predictions in survival analysis. Stat Med 2001; 20: 3083-3096.  
 
 #Thank you for your attention.   
+
