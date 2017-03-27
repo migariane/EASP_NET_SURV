@@ -13,7 +13,7 @@ which stns
 //Setting your path and working directory
 clear
 set more off
-cd "C:\Desktop\ASNS\"
+cd "c:\Users\inivitado-easp\ASNS\"
 capture log using "Period.log"
 
 //Loading the data

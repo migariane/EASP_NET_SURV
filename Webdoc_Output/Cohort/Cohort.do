@@ -33,15 +33,15 @@ II) Net Survival Estimation</br>
 <p></p>
 III) Dealing with ICSS WEIGHTS</br>
 <p></p>
-IV) Age-Standardised Five years Net Survival Estimation, chohort 1971</br>
+IV) Age-Standardised Five-year Net Survival Estimation, chohort 1971</br>
 	 <p style="text-indent: 3em">-Life Table</p>
 	 <p style="text-indent: 3em">-STNS Stata command</p>
-V) Age-Standardised Five years Net Survival Inference, chohort 1971</br>
+V) Age-Standardised Five-year Net Survival Inference, chohort 1971</br>
 <p></p>
-VI) Age-Standardised Five years Net Survival by Deprivation, cohort 1971</br></h3>
+VI) Age-Standardised Five-year Net Survival by Deprivation, cohort 1971</br></h3>
 <p></p>
-<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2003 in England</p>
-<p>Note: the interpretation of the results is not applicable to real-world</p>
+<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2001 in England</p>
+<p>Note: the interpretation of the results is not applicable to the real-world setting</p>
 
 ***/
 
@@ -54,7 +54,7 @@ VI) Age-Standardised Five years Net Survival by Deprivation, cohort 1971</br></h
 ***/
 clear
 set more off
-cd "h:\Desktop\ASNS\"
+cd "/Users/MALF/Desktop"
 
 /***
 <p>Loading the data</p>
@@ -77,7 +77,7 @@ labe var year "calendar year at diagnosis"
 tab year
 
 /***
-<p>Canlendar year at exit (last follow-up)</p>
+<p>Canlendar year at exit (last known vital status)</p>
 <p>Note that in Stata the 1st of January of 1960 = 0</p>
 <p>How you will check the consistency of the data?</p>
 ***/
@@ -87,13 +87,13 @@ tab eyear dead
 sum dead finmdy if dead==1 & (finmdy>15705 & finmdy<=16070)
 
 /***
-<p>Five-band age groups needed for standardisation </p>
+<p>Five age groups are needed for standardisation </p>
 ***/
 sum agediag, det
 egen agegr =cut(agediag), at(0 45(10)75 100) icodes
 recode agegr 0=1 1=2 2=3 3=4 4=5
 tabstat agediag, statistics( min max ) by(agegr)
-label var agegr "5-band age groups for standardisation"
+label var agegr "Five age groups for standardisation"
 
 /***
 <p>Setting time (note origin and entry)</p>
@@ -153,11 +153,11 @@ width(1000)
 <p>Net Survival for the cohort of cancer incident cases diagnosed in 1971 and followed-up for 5 years</p>
 <p>All what you have to know about STNS:</br>
 1. if year(diagmdy) == 1971</br>
-2. age and period (specification of the linking variables to merge 1:1 the life table and the cancer incident cases)</br>
+2. age and period (specification of the linking variables to merge 1:1 the life table and the incident cases)</br>
 3. strata and rate (stratified Net Survial by deprivation)</br> 
-4. at (years of follo-up to compute the Net Survival)</br>
+4. at (years of follow up to compute the Net Survival)</br>
 5. scale factor and unit</br>
-6. For display end_followup (in days) and by(agegr dep)</br>
+6. For display end_follow up (in days) and by (agegr dep)</br>
 7. saving option (really important!)</br>
 8. Please: read carefully the Stata stns help file and the Stata <a href="http://www.stata-journal.com/article.html?article=st0326">Journal article</a></p>
 ***/
@@ -178,10 +178,10 @@ list time if time==5480 & dep==1 & agegr==1 //checking consistency
 <p>Undesrtanding the results derived from STNS Stata command</p>
 ***/	
 describe
-list dep agegr time  survival lower_bound upper_bound cum_hazard ch_lower_bound ch_upper_bound std_err  in 1/10
+list dep agegr time survival std_err lower_bound upper_bound in 1/10
 
 /***
-<p>Keep results for just 5 year Net Survival estimates</p>
+<p>Keep results for just five-year Net Survival estimates</p>
 ***/
 /***
 <p>Q: What do you have to make in order to get 10 years survival?</p>
@@ -194,12 +194,13 @@ bysort dep agegr (time): keep if _n == _N
 
 /***
 <h3>III) Dealing with ICSS WEIGHTS</h3>
-<p>Weights from International Cancer Survival Standards (ICSS). Corazziari et al. European Journal of Cancer. 2004</p>
+<p>International Cancer Survival Standard (ICSS) weights </br> 
+(Corazziari I, Quinn M, Capocaccia R. Eur J Cancer. 2004; 40: 2307-16. Standard cancer patient population for age standardising survival ratios.)</p>
 ***/
 
 /***
 <p>Q: Where do you can get the information of the weights for other cancer sites?</p>
-<p>A: Check out the Stata do file provide for the exercise and the article referred above</p>
+<p>A: Check out the Stata do file provide for the exercise and Corazziari et al. European Journal of Cancer. 2004</p>
 ***/
 gen weight=. 
 *Standard cancer population one (stomach, colon, rectum, liver, lung, breast, ovary, leukaemia)
@@ -241,11 +242,11 @@ gen L95CI=(ASNS/exp(1.96*seASN/ASNS))
 gen U95CI=(ASNS*exp(1.96*seASN/ASNS))
 
 /***
-<h3>VI) Age-standardised Five years Net Survival by Deprivation, for the Cohort 1971</h3>
+<h3>VI) Age-standardised Five-year Net Survival by Deprivation, for the Cohort 1971</h3>
 ***/
 list dep survival ASNS L95CI U95CI 
 eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpattern(dot)) xtitle("Age-Standardised Net Survival")
-webdoc graph, caption(Figure 2. Age-Standardised Five years Net Survival for the Breast Cancer Cohort of 1971) cabove ///
+webdoc graph, caption(Figure 2. Age-Standardised Five-year Net Survival for the Breast Cancer Cohort of 1971) cabove ///
 width(1000)
 /***
 

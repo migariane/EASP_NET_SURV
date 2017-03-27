@@ -77,15 +77,15 @@ II) Net Survival Estimation</br>
 <p></p>
 III) Dealing with ICSS WEIGHTS</br>
 <p></p>
-IV) Age-Standardised Five years Net Survival Estimation, chohort 1971</br>
+IV) Age-Standardised Five-year Net Survival Estimation, chohort 1971</br>
 	 <p style="text-indent: 3em">-Life Table</p>
 	 <p style="text-indent: 3em">-STNS Stata command</p>
-V) Age-Standardised Five years Net Survival Inference, chohort 1971</br>
+V) Age-Standardised Five-year Net Survival Inference, chohort 1971</br>
 <p></p>
-VI) Age-Standardised Five years Net Survival by Deprivation, cohort 1971</br></h3>
+VI) Age-Standardised Five-year Net Survival by Deprivation, cohort 1971</br></h3>
 <p></p>
-<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2003 in England</p>
-<p>Note: the interpretation of the results is not applicable to real-world</p>
+<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2001 in England</p>
+<p>Note: the interpretation of the results is not applicable to the real-world setting</p>
 
 <h3>I) Data consistency and setting time</h3>
 <p>Setting your path and working directory</p>
@@ -93,8 +93,8 @@ VI) Age-Standardised Five years Net Survival by Deprivation, cohort 1971</br></h
 
 <span class="stinp">. set more off</span>
 
-<span class="stinp">. cd "h:\Desktop\ASNS\"</span>
-<span class="stres">h:\Desktop\ASNS</span>
+<span class="stinp">. cd "/Users/MALF/Desktop"</span>
+<span class="stres">/Users/MALF/Desktop</span>
 </samp></pre>
 <p>Loading the data</p>
 <pre id="stlog-2" class="stlog"><samp><span class="stinp">. use breast_stns.dta, clear</span>
@@ -111,10 +111,10 @@ Contains data from <span class="stres">breast_stns.dta</span>
   obs:<span class="stres">       355,801                          (All Cases 1971-2001, final datasets)</span>
  vars:<span class="stres">             7                          3 Mar 2017 14:30</span>
  size:<span class="stres">     5,337,015                          </span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 <span class="stres">sex            </span> byte    %8.0g      sexlb      <span class="stres">sex</span>
 <span class="stres">diagmdy        </span> int     %d                    <span class="stres">diagnosis date in days after 1-1-1960 for stns</span>
 <span class="stres">finmdy         </span> int     %d                    <span class="stres">date of last news- either date of death or date of last vital status</span>
@@ -123,7 +123,7 @@ variable name   type    format     label      variable label
 <span class="stres">dead           </span> byte    %10.0g                <span class="stres">vital status at the date of last news</span>
 <span class="stres">dep            </span> byte    %13.0g     caquintlbl
                                               <span class="stres">Deprivation quintile</span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 Sorted by: 
 
 <span class="stinp">. summarize</span>
@@ -184,7 +184,7 @@ Sorted by:
 ------------+-----------------------------------
       Total |<span class="stres">    355,801      100.00</span>
 </samp></pre>
-<p>Canlendar year at exit (last follow-up)</p>
+<p>Canlendar year at exit (last known vital status)</p>
 <p>Note that in Stata the 1st of January of 1960 = 0</p>
 <p>How you will check the consistency of the data?</p>
 <pre id="stlog-5" class="stlog"><samp><span class="stinp">. gen eyear = year(finmdy)</span>
@@ -241,7 +241,7 @@ Sorted by:
         dead |<span class="stres">      7,629           1           0          1          1</span>
       finmdy |<span class="stres">      7,629    15888.17    106.3775      15706      16070</span>
 </samp></pre>
-<p>Five-band age groups needed for standardisation </p>
+<p>Five age groups are needed for standardisation </p>
 <pre id="stlog-6" class="stlog"><samp><span class="stinp">. sum agediag, det</span>
 
                   age at diagnosis in years
@@ -280,7 +280,7 @@ Summary for variables: agediag
    Total | <span class="stres"> 15.56194  98.99247</span>
 ------------------------------
 
-<span class="stinp">. label var agegr "5-band age groups for standardisation"</span>
+<span class="stinp">. label var agegr "Five age groups for standardisation"</span>
 </samp></pre>
 <p>Setting time (note origin and entry)</p>
 <pre id="stlog-7" class="stlog"><samp><span class="stinp">. stset finmdy, fail(dead==1) origin(time diagmdy) enter(time diagmdy) </span>
@@ -449,11 +449,11 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
 <p>Net Survival for the cohort of cancer incident cases diagnosed in 1971 and followed-up for 5 years</p>
 <p>All what you have to know about STNS:</br>
 1. if year(diagmdy) == 1971</br>
-2. age and period (specification of the linking variables to merge 1:1 the life table and the cancer incident cases)</br>
+2. age and period (specification of the linking variables to merge 1:1 the life table and the incident cases)</br>
 3. strata and rate (stratified Net Survial by deprivation)</br> 
-4. at (years of follo-up to compute the Net Survival)</br>
+4. at (years of follow up to compute the Net Survival)</br>
 5. scale factor and unit</br>
-6. For display end_followup (in days) and by(agegr dep)</br>
+6. For display end_follow up (in days) and by (agegr dep)</br>
 7. saving option (really important!)</br>
 8. Please: read carefully the Stata stns help file and the Stata <a href="http://www.stata-journal.com/article.html?article=st0326">Journal article</a></p>
 <pre id="stlog-12" class="stlog"><samp><span class="stinp">. stns list using lifetable_stns.dta if year(diagmdy)==1971, <span class="stcmt">///</span>
@@ -642,15 +642,15 @@ agegr=5 Most deprived
 
 Contains data from <span class="stres">ASNetcohort_1971.dta</span>
   obs:<span class="stres">         4,677                          (All Cases 1971-2001, final datasets)</span>
- vars:<span class="stres">            20                          23 Mar 2017 15:56</span>
+ vars:<span class="stres">            20                          27 Mar 2017 11:19</span>
  size:<span class="stres">       612,687                          </span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 <span class="stres">dep            </span> byte    %13.0g     caquintlbl
                                               <span class="stres">Deprivation quintile</span>
-<span class="stres">agegr          </span> float   %9.0g                 <span class="stres">5-band age groups for standardisation</span>
+<span class="stres">agegr          </span> float   %9.0g                 <span class="stres">Five age groups for standardisation</span>
 <span class="stres">idgrp          </span> int     %8.0g                 
 <span class="stres">time           </span> double  %10.0g                <span class="stres">time of events</span>
 <span class="stres">survival       </span> double  %10.0g                <span class="stres">net survival estimate</span>
@@ -667,30 +667,31 @@ variable name   type    format     label      variable label
 <span class="stres">dstderr        </span> double  %10.0g                <span class="stres">standard error of increment excess net hazard estimate</span>
 <span class="stres">vnum1          </span> double  %10.0g                <span class="stres">weighted observed number of event</span>
 <span class="stres">vnum2          </span> double  %10.0g                <span class="stres">weighted expected number of event</span>
-<span class="stres">vnumerr        </span> double  %10.0g                <span class="stres">term for computation of standard error of excess net hazard estimate (dstderr)</span>
+<span class="stres">vnumerr        </span> double  %10.0g                <span class="stres">term for computation of standard error of excess net hazard estimate</span>
+                                                <span class="stres">(dstderr)</span>
 <span class="stres">vden           </span> double  %10.0g                <span class="stres">weighted number at risk</span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 Sorted by: <span class="stres">agegr  dep  time</span>
 
-<span class="stinp">. list dep agegr time  survival lower_bound upper_bound cum_hazard ch_lower_bound ch_upper_bound std_err  in 1/10</span>
+<span class="stinp">. list dep agegr time survival std_err lower_bound upper_bound in 1/10</span>
 
-     +-------------------------------------------------------------------------------------------------------------------+
-     | <span class="stres">          dep   agegr   time    survival   lower_b~d   upper_b~d   cum_haz~d   ch_lower~d   ch_uppe~d     std_err </span>|
-     |-------------------------------------------------------------------------------------------------------------------|
-  1. | <span class="stres">Most affluent       1     30   .99484885   .98458621   1.0051115   .00516446   -.00515132   .01548024   .00526325 </span>|
-  2. | <span class="stres">Most affluent       1     42   .98962953   .97515354   1.0041055   .01042462   -.00420306   .02505231   .00746324 </span>|
-  3. | <span class="stres">Most affluent       1     71   .98447326   .96678966   1.0021569   .01564854   -.00231397   .03361104   .00916471 </span>|
-  4. | <span class="stres">Most affluent       1     81   .97924578   .95888069   .99961086   .02097262    .00017592   .04176932   .01061076 </span>|
-  5. | <span class="stres">Most affluent       1    116    .9741107   .95140065   .99682076   .02623032     .0029167   .04954395   .01189493 </span>|
-     |-------------------------------------------------------------------------------------------------------------------|
-  6. | <span class="stres">Most affluent       1    151   .96897348    .9441592   .99378777   .03151803     .0059092   .05712687   .01306597 </span>|
-  7. | <span class="stres">Most affluent       1    184   .96382891   .93709605   .99056176   .03684148    .00910538   .06457758   .01415133 </span>|
-  8. | <span class="stres">Most affluent       1    216   .95868288   .93018107   .98718468   .04219494    .01246477   .07192511   .01516873 </span>|
-  9. | <span class="stres">Most affluent       1    218   .95342578   .92327998   .98357157    .0476937     .0160753    .0793121   .01613213 </span>|
- 10. | <span class="stres">Most affluent       1    232   .94820779   .91651611   .97989947   .05318161    .01975889   .08660433   .01705272 </span>|
-     +-------------------------------------------------------------------------------------------------------------------+
+     +------------------------------------------------------------------------------+
+     | <span class="stres">          dep   agegr   time    survival     std_err   lower_b~d   upper_b~d </span>|
+     |------------------------------------------------------------------------------|
+  1. | <span class="stres">Most affluent       1     30   .99484885   .00526325   .98458621   1.0051115 </span>|
+  2. | <span class="stres">Most affluent       1     42   .98962953   .00746324   .97515354   1.0041055 </span>|
+  3. | <span class="stres">Most affluent       1     71   .98447326   .00916471   .96678966   1.0021569 </span>|
+  4. | <span class="stres">Most affluent       1     81   .97924578   .01061076   .95888069   .99961086 </span>|
+  5. | <span class="stres">Most affluent       1    116    .9741107   .01189493   .95140065   .99682076 </span>|
+     |------------------------------------------------------------------------------|
+  6. | <span class="stres">Most affluent       1    151   .96897348   .01306597    .9441592   .99378777 </span>|
+  7. | <span class="stres">Most affluent       1    184   .96382891   .01415133   .93709605   .99056176 </span>|
+  8. | <span class="stres">Most affluent       1    216   .95868288   .01516873   .93018107   .98718468 </span>|
+  9. | <span class="stres">Most affluent       1    218   .95342578   .01613213   .92327998   .98357157 </span>|
+ 10. | <span class="stres">Most affluent       1    232   .94820779   .01705272   .91651611   .97989947 </span>|
+     +------------------------------------------------------------------------------+
 </samp></pre>
-<p>Keep results for just 5 year Net Survival estimates</p>
+<p>Keep results for just five-year Net Survival estimates</p>
 <p>Q: What do you have to make in order to get 10 years survival?</p>
 <p>A: drop if time > ???. Remember: 365.25 x Years (display 365.25*10)
 <pre id="stlog-15" class="stlog"><samp><span class="stinp">. display 365.25*10</span>
@@ -706,9 +707,10 @@ Sorted by: <span class="stres">agegr  dep  time</span>
 (3,136 observations deleted)
 </samp></pre>
 <h3>III) Dealing with ICSS WEIGHTS</h3>
-<p>Weights from International Cancer Survival Standards (ICSS). Corazziari et al. European Journal of Cancer. 2004</p>
+<p>International Cancer Survival Standard (ICSS) weights </br> 
+(Corazziari I, Quinn M, Capocaccia R. Eur J Cancer. 2004; 40: 2307-16. Standard cancer patient population for age standardising survival ratios.)</p>
 <p>Q: Where do you can get the information of the weights for other cancer sites?</p>
-<p>A: Check out the Stata do file provide for the exercise and the article referred above</p>
+<p>A: Check out the Stata do file provide for the exercise and Corazziari et al. European Journal of Cancer. 2004</p>
 <pre id="stlog-16" class="stlog"><samp><span class="stinp">. gen weight=. </span>
 (25 missing values generated)
 
@@ -824,7 +826,8 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 <span class="stres">    </span>survival |<span class="stres">   1.0000   1.0000</span>
 
 
-<span class="stinp">. gen se_ns=ns*std_err <span class="stcmt">//where std_err is the standard error of the cumulative hazard and ns is the survival estimate from stns</span></span>
+<span class="stinp">. gen se_ns=ns*std_err <span class="stcmt">//where std_err is the standard error of the cumulative hazard and ns is the survival estimat</span>
+&gt; e from stns</span>
 
 <span class="stinp">. bysort <span class="stcmt">/*insert relevant variables*/</span> dep (agegr): gen seASN = sqrt(sum((se_ns*weight)^2))</span>
 
@@ -837,7 +840,7 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 
 <span class="stinp">. gen U95CI=(ASNS*exp(1.96*seASN/ASNS))</span>
 </samp></pre>
-<h3>VI) Age-standardised Five years Net Survival by Deprivation, for the Cohort 1971</h3>
+<h3>VI) Age-standardised Five-year Net Survival by Deprivation, for the Cohort 1971</h3>
 <pre id="stlog-20" class="stlog"><samp><span class="stinp">. list dep survival ASNS L95CI U95CI </span>
 
      +------------------------------------------------------------+
@@ -850,10 +853,11 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
   5. | <span class="stres">Most deprived   .28176033   .4023852   .3628127   .4462739 </span>|
      +------------------------------------------------------------+
 
-<span class="stinp">. eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpattern(dot)) xtitle("Age-Standardised Net Survival")</span>
+<span class="stinp">. eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpatter
+&gt; n(dot)) xtitle("Age-Standardised Net Survival")</span>
 </samp></pre>
 <figure id="fig-20">
-<figcaption>Figure 2. Age-Standardised Five years Net Survival for the Breast Cancer Cohort of 1971</figcaption>
+<figcaption>Figure 2. Age-Standardised Five-year Net Survival for the Breast Cancer Cohort of 1971</figcaption>
 <a href="Cohort_20.png"><img alt="Cohort_20.png" src="Cohort_20.png"/></a>
 </figure>
 

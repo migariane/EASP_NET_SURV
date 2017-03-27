@@ -77,15 +77,15 @@ II) Net Survival Estimation</br>
 <p></p>
 III) Dealing with ICSS WEIGHTS</br>
 <p></p>
-IV) Age-Standardised Five years Net Survival Estimation, Period 1981-85</br>
+IV) Age-Standardised Five-year Net Survival Estimation, Period 1981-85</br>
 	 <p style="text-indent: 3em">-Life Table</p>
 	 <p style="text-indent: 3em">-STNS Stata command</p>
-V) Age-Standardised Five years Net Survival Inference, Period 1981-85</br>
+V) Age-Standardised Five-year Net Survival Inference, Period 1981-85</br>
 <p></p>
-VI) Age-Standardised Five years Net Survival by Deprivation, Period 1981-85</br></h3>
+VI) Age-Standardised Five-year Net Survival by Deprivation, Period 1981-85</br></h3>
 <p></p>
-<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2003 in England</p>
-<p>Note: the interpretation of the results is not applicable to real-world</p>
+<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2001 in England</p>
+<p>Note: the interpretation of the results is not applicable to the real-world setting</p>
 
 <h3>I) Data consistency and setting time</h3>
 <p>Setting your path and working directory</p>
@@ -93,8 +93,8 @@ VI) Age-Standardised Five years Net Survival by Deprivation, Period 1981-85</br>
 
 <span class="stinp">. set more off</span>
 
-<span class="stinp">. cd "h:\Desktop\ASNS\"</span>
-<span class="stres">h:\Desktop\ASNS</span>
+<span class="stinp">. cd "/Users/MALF/Desktop"</span>
+<span class="stres">/Users/MALF/Desktop</span>
 </samp></pre>
 <p>Loading the data</p>
 <pre id="stlog-2" class="stlog"><samp><span class="stinp">. use breast_stns.dta, clear</span>
@@ -111,10 +111,10 @@ Contains data from <span class="stres">breast_stns.dta</span>
   obs:<span class="stres">       355,801                          (All Cases 1971-2001, final datasets)</span>
  vars:<span class="stres">             7                          3 Mar 2017 14:30</span>
  size:<span class="stres">     5,337,015                          </span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
               storage   display    value
 variable name   type    format     label      variable label
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 <span class="stres">sex            </span> byte    %8.0g      sexlb      <span class="stres">sex</span>
 <span class="stres">diagmdy        </span> int     %d                    <span class="stres">diagnosis date in days after 1-1-1960 for stns</span>
 <span class="stres">finmdy         </span> int     %d                    <span class="stres">date of last news- either date of death or date of last vital status</span>
@@ -123,7 +123,7 @@ variable name   type    format     label      variable label
 <span class="stres">dead           </span> byte    %10.0g                <span class="stres">vital status at the date of last news</span>
 <span class="stres">dep            </span> byte    %13.0g     caquintlbl
                                               <span class="stres">Deprivation quintile</span>
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
 Sorted by: 
 
 <span class="stinp">. summarize</span>
@@ -184,7 +184,7 @@ Sorted by:
 ------------+-----------------------------------
       Total |<span class="stres">    355,801      100.00</span>
 </samp></pre>
-<p>Canlendar year at exit (last follow-up)</p>
+<p>Canlendar year at exit (last known vital status)</p>
 <p>Note that in Stata the 1st of January of 1960 = 0</p>
 <p>How you will check the consistency of the data?</p>
 <pre id="stlog-5" class="stlog"><samp><span class="stinp">. gen eyear = year(finmdy)</span>
@@ -241,7 +241,7 @@ Sorted by:
         dead |<span class="stres">      7,629           1           0          1          1</span>
       finmdy |<span class="stres">      7,629    15888.17    106.3775      15706      16070</span>
 </samp></pre>
-<p>Five-band age groups needed for standardisation </p>
+<p>Five age groups are needed for standardisation </p>
 <pre id="stlog-6" class="stlog"><samp><span class="stinp">. sum agediag, det</span>
 
                   age at diagnosis in years
@@ -282,7 +282,7 @@ Summary for variables: agediag
 
 <span class="stinp">. label var agegr "5-band age groups for standardisation"</span>
 </samp></pre>
-<p>SETTING time for the five years calendar PERIOD time 1981-1985 (note the ORIGIN, ENTRY and EXIT options)</br>
+<p>SETTING time for the five-year calendar PERIOD time 1981-1985 (note the ORIGIN, ENTRY and EXIT options)</br>
 Understanding your approach: note _t0 is not 0 as before in the cohort analysis</br>
 ORIGIN(time diagmdy): you are setting the date of cancer diagnosis as the <font color="blue">ANALYSIS TIME</font></br>
 ENTER(time mdy(1,1,1980): the <font color="blue">ONSET RISK</font> start a the date specified by the user</br>
@@ -315,17 +315,17 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
      +------------------------------------------------+
      | <span class="stres">  diagmdy      finmdy    _t0     _t   _d   _st </span>|
      |------------------------------------------------|
-  1. | <span class="stres">28jan1971   31dec2003   3626   5451    0     1 </span>|
-  2. | <span class="stres">31dec1971   02jul1976      .      .    .     0 </span>|
-  3. | <span class="stres">11oct1971   04oct1974      .      .    .     0 </span>|
-  4. | <span class="stres">17jun1971   24may1976      .      .    .     0 </span>|
-  5. | <span class="stres">24feb1971   22jan1972      .      .    .     0 </span>|
+  1. | <span class="stres">17jun1971   31dec2003   3486   5311    0     1 </span>|
+  2. | <span class="stres">21jun1971   11jul1974      .      .    .     0 </span>|
+  3. | <span class="stres">15jan1971   13nov1972      .      .    .     0 </span>|
+  4. | <span class="stres">01jan1971   12mar1981   3653   3723    1     1 </span>|
+  5. | <span class="stres">18may1971   24jul1977      .      .    .     0 </span>|
      |------------------------------------------------|
-  6. | <span class="stres">26jul1971   06may1974      .      .    .     0 </span>|
-  7. | <span class="stres">01nov1971   31dec2003   3349   5174    0     1 </span>|
-  8. | <span class="stres">17mar1971   03feb1977      .      .    .     0 </span>|
-  9. | <span class="stres">11jun1971   16jul1972      .      .    .     0 </span>|
- 10. | <span class="stres">05mar1971   11apr1972      .      .    .     0 </span>|
+  6. | <span class="stres">16sep1971   23mar1973      .      .    .     0 </span>|
+  7. | <span class="stres">09jul1971   07jan1996   3464   5289    0     1 </span>|
+  8. | <span class="stres">01oct1971   31dec2003   3380   5205    0     1 </span>|
+  9. | <span class="stres">04jun1971   25jun1971      .      .    .     0 </span>|
+ 10. | <span class="stres">02mar1971   03aug1976      .      .    .     0 </span>|
      +------------------------------------------------+
 
 <span class="stinp">. list diagmdy finmdy _t0 _t _d _st in 130100/130110 </span>
@@ -333,19 +333,19 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
         +----------------------------------------------+
         | <span class="stres">  diagmdy      finmdy   _t0    _t   _d   _st </span>|
         |----------------------------------------------|
-130100. | <span class="stres">28jun1985   23dec1991     0   186    0     1 </span>|
-130101. | <span class="stres">17jan1985   28jun1986     0   348    0     1 </span>|
-130102. | <span class="stres">22oct1985   11jul1994     0    70    0     1 </span>|
-130103. | <span class="stres">08jul1985   04jun1986     0   176    0     1 </span>|
-130104. | <span class="stres">29oct1985   09feb1992     0    63    0     1 </span>|
+130100. | <span class="stres">07nov1985   25oct1992     0    54    0     1 </span>|
+130101. | <span class="stres">10may1985   31dec2003     0   235    0     1 </span>|
+130102. | <span class="stres">08nov1985   11sep1999     0    53    0     1 </span>|
+130103. | <span class="stres">31may1985   31dec2003     0   214    0     1 </span>|
+130104. | <span class="stres">10may1985   17jan1986     0   235    0     1 </span>|
         |----------------------------------------------|
-130105. | <span class="stres">29apr1985   13feb2000     0   246    0     1 </span>|
-130106. | <span class="stres">01jan1985   06mar1991     0   364    0     1 </span>|
-130107. | <span class="stres">22oct1985   20may1986     0    70    0     1 </span>|
-130108. | <span class="stres">17jul1985   21mar1987     0   167    0     1 </span>|
-130109. | <span class="stres">11mar1985   19mar1985     0     8    1     1 </span>|
+130105. | <span class="stres">21mar1985   22mar1987     0   285    0     1 </span>|
+130106. | <span class="stres">29jul1985   20sep1988     0   155    0     1 </span>|
+130107. | <span class="stres">04apr1985   13mar1988     0   271    0     1 </span>|
+130108. | <span class="stres">15aug1985   16jun1995     0   138    0     1 </span>|
+130109. | <span class="stres">23sep1985   10aug1989     0    99    0     1 </span>|
         |----------------------------------------------|
-130110. | <span class="stres">23jun1985   31dec2003     0   191    0     1 </span>|
+130110. | <span class="stres">04mar1985   31mar1986     0   302    0     1 </span>|
         +----------------------------------------------+
 
 <span class="stinp">. list diagmdy finmdy _t0 _t _d _st in 180100/180110 </span>
@@ -353,19 +353,19 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
         +---------------------------------------------+
         | <span class="stres">  diagmdy      finmdy   _t0   _t   _d   _st </span>|
         |---------------------------------------------|
-180100. | <span class="stres">16mar1990   19jun1996     .    .    .     0 </span>|
-180101. | <span class="stres">20aug1990   06sep1990     .    .    .     0 </span>|
-180102. | <span class="stres">02apr1990   26jun1995     .    .    .     0 </span>|
-180103. | <span class="stres">13feb1990   16apr2000     .    .    .     0 </span>|
-180104. | <span class="stres">14may1990   03sep1997     .    .    .     0 </span>|
+180100. | <span class="stres">30aug1990   11dec1998     .    .    .     0 </span>|
+180101. | <span class="stres">05dec1990   31dec2003     .    .    .     0 </span>|
+180102. | <span class="stres">27nov1990   23feb1999     .    .    .     0 </span>|
+180103. | <span class="stres">19oct1990   31dec2003     .    .    .     0 </span>|
+180104. | <span class="stres">18apr1990   02jun1990     .    .    .     0 </span>|
         |---------------------------------------------|
-180105. | <span class="stres">14sep1990   28sep1992     .    .    .     0 </span>|
-180106. | <span class="stres">12jul1990   31dec2003     .    .    .     0 </span>|
-180107. | <span class="stres">02jul1990   03jul1993     .    .    .     0 </span>|
-180108. | <span class="stres">28jun1990   10mar1993     .    .    .     0 </span>|
-180109. | <span class="stres">11jul1990   31dec2003     .    .    .     0 </span>|
+180105. | <span class="stres">27feb1990   31dec2003     .    .    .     0 </span>|
+180106. | <span class="stres">11sep1990   19nov1991     .    .    .     0 </span>|
+180107. | <span class="stres">11jul1990   31dec2003     .    .    .     0 </span>|
+180108. | <span class="stres">09may1990   24mar1991     .    .    .     0 </span>|
+180109. | <span class="stres">06nov1990   14jan1992     .    .    .     0 </span>|
         |---------------------------------------------|
-180110. | <span class="stres">13nov1990   08mar2001     .    .    .     0 </span>|
+180110. | <span class="stres">03apr1990   31dec2003     .    .    .     0 </span>|
         +---------------------------------------------+
 </samp></pre>
 <h3>II) Net Survival Estimation: LIFE TABLE and STNS</h3>
@@ -407,17 +407,17 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
      +-----------------------------------------------------------+
      | <span class="stres">  diagmdy      finmdy    _t0     _t   _d   _st    agediag </span>|
      |-----------------------------------------------------------|
-  1. | <span class="stres">28jan1971   31dec2003   3626   5451    0     1   56.91718 </span>|
-  2. | <span class="stres">31dec1971   02jul1976      .      .    .     0   65.67283 </span>|
-  3. | <span class="stres">11oct1971   04oct1974      .      .    .     0   55.30185 </span>|
-  4. | <span class="stres">17jun1971   24may1976      .      .    .     0   45.95756 </span>|
-  5. | <span class="stres">24feb1971   22jan1972      .      .    .     0   61.70568 </span>|
+  1. | <span class="stres">17jun1971   31dec2003   3486   5311    0     1   57.65914 </span>|
+  2. | <span class="stres">21jun1971   11jul1974      .      .    .     0   81.89459 </span>|
+  3. | <span class="stres">15jan1971   13nov1972      .      .    .     0   35.54004 </span>|
+  4. | <span class="stres">01jan1971   12mar1981   3653   3723    1     1   51.46064 </span>|
+  5. | <span class="stres">18may1971   24jul1977      .      .    .     0   59.49076 </span>|
      |-----------------------------------------------------------|
-  6. | <span class="stres">26jul1971   06may1974      .      .    .     0   60.06571 </span>|
-  7. | <span class="stres">01nov1971   31dec2003   3349   5174    0     1   52.38877 </span>|
-  8. | <span class="stres">17mar1971   03feb1977      .      .    .     0   78.96783 </span>|
-  9. | <span class="stres">11jun1971   16jul1972      .      .    .     0   55.58932 </span>|
- 10. | <span class="stres">05mar1971   11apr1972      .      .    .     0   40.39699 </span>|
+  6. | <span class="stres">16sep1971   23mar1973      .      .    .     0   49.50856 </span>|
+  7. | <span class="stres">09jul1971   07jan1996   3464   5289    0     1   61.46201 </span>|
+  8. | <span class="stres">01oct1971   31dec2003   3380   5205    0     1   37.24846 </span>|
+  9. | <span class="stres">04jun1971   25jun1971      .      .    .     0   81.20465 </span>|
+ 10. | <span class="stres">02mar1971   03aug1976      .      .    .     0   53.87543 </span>|
      +-----------------------------------------------------------+
 
 <span class="stinp">. gen agediagindays = agediag*365.25</span>
@@ -429,22 +429,22 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
      +----------------------------------------------------------------------+
      | <span class="stres">  diagmdy      finmdy    _t0     _t   _d   _st    agediag   agedia~s </span>|
      |----------------------------------------------------------------------|
-  1. | <span class="stres">28jan1971   31dec2003   3626   5451    0     1   56.91718      20789 </span>|
-  2. | <span class="stres">31dec1971   02jul1976      .      .    .     0   65.67283      23987 </span>|
-  3. | <span class="stres">11oct1971   04oct1974      .      .    .     0   55.30185      20199 </span>|
-  4. | <span class="stres">17jun1971   24may1976      .      .    .     0   45.95756      16786 </span>|
-  5. | <span class="stres">24feb1971   22jan1972      .      .    .     0   61.70568      22538 </span>|
+  1. | <span class="stres">17jun1971   31dec2003   3486   5311    0     1   57.65914      21060 </span>|
+  2. | <span class="stres">21jun1971   11jul1974      .      .    .     0   81.89459      29912 </span>|
+  3. | <span class="stres">15jan1971   13nov1972      .      .    .     0   35.54004      12981 </span>|
+  4. | <span class="stres">01jan1971   12mar1981   3653   3723    1     1   51.46064      18796 </span>|
+  5. | <span class="stres">18may1971   24jul1977      .      .    .     0   59.49076      21729 </span>|
      |----------------------------------------------------------------------|
-  6. | <span class="stres">26jul1971   06may1974      .      .    .     0   60.06571      21939 </span>|
-  7. | <span class="stres">01nov1971   31dec2003   3349   5174    0     1   52.38877      19135 </span>|
-  8. | <span class="stres">17mar1971   03feb1977      .      .    .     0   78.96783      28843 </span>|
-  9. | <span class="stres">11jun1971   16jul1972      .      .    .     0   55.58932      20304 </span>|
- 10. | <span class="stres">05mar1971   11apr1972      .      .    .     0   40.39699      14755 </span>|
+  6. | <span class="stres">16sep1971   23mar1973      .      .    .     0   49.50856      18083 </span>|
+  7. | <span class="stres">09jul1971   07jan1996   3464   5289    0     1   61.46201      22449 </span>|
+  8. | <span class="stres">01oct1971   31dec2003   3380   5205    0     1   37.24846      13605 </span>|
+  9. | <span class="stres">04jun1971   25jun1971      .      .    .     0   81.20465      29660 </span>|
+ 10. | <span class="stres">02mar1971   03aug1976      .      .    .     0   53.87543      19678 </span>|
      +----------------------------------------------------------------------+
 </samp></pre>
 <p>Understanding your approach:</br>
 Note _t0 is not 0 as before in the cohort analysis</br>
-Our focus in the analysis is just five-years calendar period</p>
+Our focus in the analysis is just five-year calendar period</p>
 <pre id="stlog-10" class="stlog"><samp><span class="stinp">. preserve</span>
 
 <span class="stinp">. keep if _st==1</span>
@@ -455,17 +455,17 @@ Our focus in the analysis is just five-years calendar period</p>
      +-------------------------------------------------------+
      | <span class="stres">  diagmdy      finmdy    _t0     _t   _d   _st   year </span>|
      |-------------------------------------------------------|
-  1. | <span class="stres">28jan1971   31dec2003   3626   5451    0     1   1971 </span>|
-  2. | <span class="stres">01nov1971   31dec2003   3349   5174    0     1   1971 </span>|
-  3. | <span class="stres">05jul1971   31dec2003   3468   5293    0     1   1971 </span>|
-  4. | <span class="stres">06jan1971   31dec2003   3648   5473    0     1   1971 </span>|
-  5. | <span class="stres">05apr1971   19aug1982   3559   4154    1     1   1971 </span>|
+  1. | <span class="stres">17jun1971   31dec2003   3486   5311    0     1   1971 </span>|
+  2. | <span class="stres">01jan1971   12mar1981   3653   3723    1     1   1971 </span>|
+  3. | <span class="stres">09jul1971   07jan1996   3464   5289    0     1   1971 </span>|
+  4. | <span class="stres">01oct1971   31dec2003   3380   5205    0     1   1971 </span>|
+  5. | <span class="stres">13jul1971   31dec2003   3460   5285    0     1   1971 </span>|
      |-------------------------------------------------------|
-  6. | <span class="stres">25jan1971   02feb1987   3629   5454    0     1   1971 </span>|
-  7. | <span class="stres">20jul1971   16jun1988   3453   5278    0     1   1971 </span>|
-  8. | <span class="stres">01dec1971   15mar1982   3319   3757    1     1   1971 </span>|
-  9. | <span class="stres">26oct1971   26aug1993   3355   5180    0     1   1971 </span>|
- 10. | <span class="stres">03may1971   12jun1982   3531   4058    1     1   1971 </span>|
+  6. | <span class="stres">21jul1971   03nov2002   3452   5277    0     1   1971 </span>|
+  7. | <span class="stres">27jun1971   21jan1984   3476   4591    1     1   1971 </span>|
+  8. | <span class="stres">11aug1971   31dec2003   3431   5256    0     1   1971 </span>|
+  9. | <span class="stres">05feb1971   12dec1984   3618   5059    0     1   1971 </span>|
+ 10. | <span class="stres">24sep1971   31jan1981   3387   3417    1     1   1971 </span>|
      +-------------------------------------------------------+
 
 <span class="stinp">. display 5046-3220</span>
@@ -560,13 +560,13 @@ variable <span class="stres">approach</span> was <span class="stres">str11</span
 </figure>
 <p>Q: Can you explain the differences?</br>
 A: Advances in Medical Treatment!</p>
-<p>Five-years Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis for the Period 1.1.1981 31.12.1985</br>
+<p>Five-year Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis for the Period 1.1.1981 31.12.1985</br>
 Q: Which other options I have to know to understand STNS?</br>
-1. age and period (specification of the linking variables to merge 1:1 the life table and the cancer incident cases)</br>
+1. age and period (specification of the linking variables to merge 1:1 the life table and incident cases)</br>
 2. strata and rate (stratified Net Survial by deprivation)</br> 
-3. at (years of follo-up to compute the Net Survival)</br>
+3. at (years of follow up to compute the Net Survival)</br>
 4. scale factor and unit</br>
-5. For display end_followup (in days) and by(agegr dep)</br>
+5. For display end_follow up (in days) and by (agegr dep)</br>
 6. saving option (really important!). Please use a meaningful name</br>
 7. Please: read carefully the Stata stns help file and the Stata <a href="http://www.stata-journal.com/article.html?article=st0326">Journal article</a></p>
 <pre id="stlog-13" class="stlog"><samp><span class="stinp">. use breast_stns, clear</span>
@@ -761,7 +761,8 @@ agegr=5 Most deprived
 (29,769 observations deleted)
 </samp></pre>
 <h3>III) Dealing with ICSS WEIGHTS</h3>
-<p>Weights from International Cancer Survival Standards (ICSS). Corazziari et al. European Journal of Cancer. 2004</p>
+<p>International Cancer Survival Standard (ICSS) weights </br> 
+(Corazziari I, Quinn M, Capocaccia R. Eur J Cancer. 2004; 40: 2307-16. Standard cancer patient population for age standardising survival ratios.)</p>
 <p>Q: Where do you can get the information of the weights for other cancer sites?</p>
 <p>A: Check out the Stata do file provide for the exercise and the article referred above</p>
 <pre id="stlog-14" class="stlog"><samp><span class="stinp">. gen weight=. </span>
@@ -879,7 +880,8 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 <span class="stres">    </span>survival |<span class="stres">   1.0000   1.0000</span>
 
 
-<span class="stinp">. gen se_ns=ns*std_err <span class="stcmt">//where std_err is the standard error of the cumulative hazard and ns is the survival estimate from stns</span></span>
+<span class="stinp">. gen se_ns=ns*std_err <span class="stcmt">//where std_err is the standard error of the cumulative hazard and ns is the survival estimat</span>
+&gt; e from stns</span>
 
 <span class="stinp">. bysort <span class="stcmt">/*insert relevant variables*/</span> dep (agegr): gen seASN = sqrt(sum((se_ns*weight)^2))</span>
 
@@ -892,7 +894,7 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 
 <span class="stinp">. gen U95CI=(ASNS*exp(1.96*seASN/ASNS))</span>
 </samp></pre>
-<h3>VI) Age-standardised Five years Net Survival by Deprivation, for the Cohort 1971</h3>
+<h3>VI) Age-standardised Five-year Net Survival by Deprivation for the Period 1981-1985</h3>
 <pre id="stlog-18" class="stlog"><samp><span class="stinp">. list dep survival ASNS L95CI U95CI </span>
 
      +------------------------------------------------------------+
@@ -905,10 +907,11 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
   5. | <span class="stres">Most deprived   .46411446   .5577975   .5422491   .5737917 </span>|
      +------------------------------------------------------------+
 
-<span class="stinp">. eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpattern(dot)) xtitle("Age-Standardised Net Survival")</span>
+<span class="stinp">. eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpatter
+&gt; n(dot)) xtitle("Age-Standardised Net Survival")</span>
 </samp></pre>
 <figure id="fig-18">
-<figcaption>Figure 2. Age-Standardised Five years Net Survival for Breast Cancer, Period 1981-1985</figcaption>
+<figcaption>Figure 2. Age-Standardised Five-year Net Survival for Breast Cancer, Period 1981-1985</figcaption>
 <a href="Period_18.png"><img alt="Period_18.png" src="Period_18.png"/></a>
 </figure>
 

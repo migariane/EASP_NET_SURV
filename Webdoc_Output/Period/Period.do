@@ -33,15 +33,15 @@ II) Net Survival Estimation</br>
 <p></p>
 III) Dealing with ICSS WEIGHTS</br>
 <p></p>
-IV) Age-Standardised Five years Net Survival Estimation, Period 1981-85</br>
+IV) Age-Standardised Five-year Net Survival Estimation, Period 1981-85</br>
 	 <p style="text-indent: 3em">-Life Table</p>
 	 <p style="text-indent: 3em">-STNS Stata command</p>
-V) Age-Standardised Five years Net Survival Inference, Period 1981-85</br>
+V) Age-Standardised Five-year Net Survival Inference, Period 1981-85</br>
 <p></p>
-VI) Age-Standardised Five years Net Survival by Deprivation, Period 1981-85</br></h3>
+VI) Age-Standardised Five-year Net Survival by Deprivation, Period 1981-85</br></h3>
 <p></p>
-<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2003 in England</p>
-<p>Note: the interpretation of the results is not applicable to real-world</p>
+<p>Note: the data used in the tutorial has been modified from the original source for a teaching purpose and represent breast cancer incident cases between 1971 and 2001 in England</p>
+<p>Note: the interpretation of the results is not applicable to the real-world setting</p>
 
 ***/
 
@@ -54,7 +54,7 @@ VI) Age-Standardised Five years Net Survival by Deprivation, Period 1981-85</br>
 ***/
 clear
 set more off
-cd "c:\Desktop\ASNS\"
+cd "/Users/MALF/Desktop"
 
 /***
 <p>Loading the data</p>
@@ -77,7 +77,7 @@ labe var year "calendar year at diagnosis"
 tab year
 
 /***
-<p>Canlendar year at exit (last follow-up)</p>
+<p>Canlendar year at exit (last known vital status)</p>
 <p>Note that in Stata the 1st of January of 1960 = 0</p>
 <p>How you will check the consistency of the data?</p>
 ***/
@@ -87,7 +87,7 @@ tab eyear dead
 sum dead finmdy if dead==1 & (finmdy>15705 & finmdy<=16070)
 
 /***
-<p>Five-band age groups needed for standardisation </p>
+<p>Five age groups are needed for standardisation </p>
 ***/
 sum agediag, det
 egen agegr =cut(agediag), at(0 45(10)75 100) icodes
@@ -96,7 +96,7 @@ tabstat agediag, statistics(min max) by(agegr)
 label var agegr "5-band age groups for standardisation"
 
 /***
-<p>SETTING time for the five years calendar PERIOD time 1981-1985 (note the ORIGIN, ENTRY and EXIT options)</br>
+<p>SETTING time for the five-year calendar PERIOD time 1981-1985 (note the ORIGIN, ENTRY and EXIT options)</br>
 Understanding your approach: note _t0 is not 0 as before in the cohort analysis</br>
 ORIGIN(time diagmdy): you are setting the date of cancer diagnosis as the <font color="blue">ANALYSIS TIME</font></br>
 ENTER(time mdy(1,1,1980): the <font color="blue">ONSET RISK</font> start a the date specified by the user</br>
@@ -132,7 +132,7 @@ list diagmdy finmdy _t0 _t _d _st agediag agediagindays in 1/10
 /***
 <p>Understanding your approach:</br>
 Note _t0 is not 0 as before in the cohort analysis</br>
-Our focus in the analysis is just five-years calendar period</p>
+Our focus in the analysis is just five-year calendar period</p>
 ***/
 preserve
 keep if _st==1
@@ -189,13 +189,13 @@ A: Advances in Medical Treatment!</p>
 ***/
 
 /***
-<p>Five-years Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis for the Period 1.1.1981 31.12.1985</br>
+<p>Five-year Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis for the Period 1.1.1981 31.12.1985</br>
 Q: Which other options I have to know to understand STNS?</br>
-1. age and period (specification of the linking variables to merge 1:1 the life table and the cancer incident cases)</br>
+1. age and period (specification of the linking variables to merge 1:1 the life table and incident cases)</br>
 2. strata and rate (stratified Net Survial by deprivation)</br> 
-3. at (years of follo-up to compute the Net Survival)</br>
+3. at (years of follow up to compute the Net Survival)</br>
 4. scale factor and unit</br>
-5. For display end_followup (in days) and by(agegr dep)</br>
+5. For display end_follow up (in days) and by (agegr dep)</br>
 6. saving option (really important!). Please use a meaningful name</br>
 7. Please: read carefully the Stata stns help file and the Stata <a href="http://www.stata-journal.com/article.html?article=st0326">Journal article</a></p>
 ***/
@@ -217,7 +217,8 @@ bysort dep agegr (time): keep if _n == _N
 
 /***
 <h3>III) Dealing with ICSS WEIGHTS</h3>
-<p>Weights from International Cancer Survival Standards (ICSS). Corazziari et al. European Journal of Cancer. 2004</p>
+<p>International Cancer Survival Standard (ICSS) weights </br> 
+(Corazziari I, Quinn M, Capocaccia R. Eur J Cancer. 2004; 40: 2307-16. Standard cancer patient population for age standardising survival ratios.)</p>
 ***/
 /***
 <p>Q: Where do you can get the information of the weights for other cancer sites?</p>
@@ -263,11 +264,11 @@ gen L95CI=(ASNS/exp(1.96*seASN/ASNS))
 gen U95CI=(ASNS*exp(1.96*seASN/ASNS))
 
 /***
-<h3>VI) Age-standardised Five years Net Survival by Deprivation, for the Cohort 1971</h3>
+<h3>VI) Age-standardised Five-year Net Survival by Deprivation for the Period 1981-1985</h3>
 ***/
 list dep survival ASNS L95CI U95CI 
 eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpattern(dot)) xtitle("Age-Standardised Net Survival")
-webdoc graph, caption(Figure 2. Age-Standardised Five years Net Survival for Breast Cancer, Period 1981-1985) cabove ///
+webdoc graph, caption(Figure 2. Age-Standardised Five-year Net Survival for Breast Cancer, Period 1981-1985) cabove ///
 width(1000)
 /***
 

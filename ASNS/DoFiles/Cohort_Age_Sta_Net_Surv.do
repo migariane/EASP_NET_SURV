@@ -14,7 +14,7 @@ which stns
 
 clear
 set more off
-cd "C:\Desktop\ASNS\"
+cd "c:\Users\inivitado-easp\ASNS\"
 capture log using "Cohort.log"
 
 /***
@@ -48,7 +48,7 @@ tab eyear dead
 sum dead finmdy if dead==1 & (finmdy>15705 & finmdy<=16070)
 
 /***
-Five-band age groups needed for standardisation 
+Five age groups are needed for standardisation 
 ***/
 sum agediag, det
 egen agegr =cut(agediag), at(0 45(10)75 100) icodes
@@ -117,7 +117,7 @@ All what you have to know about STNS:
 3. strata and rate (stratified Net Survial by deprivation)
 4. at (years of follo-up to compute the Net Survival)
 5. scale factor and unit</br>
-6. For display end_followup (in days) and by(agegr dep)
+6. For display end_follow up (in days) and by (agegr dep)
 7. saving option (really important!)
 8. Please: read carefully the Stata stns help file and the Stata http://www.stata-journal.com/article.html?article=st0326
 ***/
@@ -141,7 +141,7 @@ describe
 list dep agegr time  survival lower_bound upper_bound cum_hazard ch_lower_bound ch_upper_bound std_err  in 1/10
 
 /***
-Keep results for just 5 year Net Survival estimates
+Keep results for just Five-year Net Survival estimates
 ***/
 /***
 Q: What do you have to make in order to get 10 years survival?
@@ -218,12 +218,10 @@ gen L95CI=(ASNS/exp(1.96*seASN/ASNS))
 gen U95CI=(ASNS*exp(1.96*seASN/ASNS))
 
 /***
-VI) Age-standardised Five years Net Survival by Deprivation, for the Cohort 1971
+VI) Age-standardised Five-year Net Survival by Deprivation, for the Cohort 1971
 ***/
 list dep survival ASNS L95CI U95CI 
 eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpattern(dot)) xtitle("Age-Standardised Net Survival")
-webdoc graph, caption(Figure 2. Age-Standardised Five years Net Survival for the Breast Cancer Cohort of 1971) cabove ///
-width(1000)
 
 log close
 rm ASNetcohort_1971.dta
