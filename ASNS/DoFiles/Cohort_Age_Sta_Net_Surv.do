@@ -14,7 +14,7 @@ which stns
 
 clear
 set more off
-cd "c:\Users\inivitado-easp\ASNS\"
+cd "c:\Users\inivitado-easp\Desktop\ASNS\"
 capture log using "Cohort.log"
 
 /***
