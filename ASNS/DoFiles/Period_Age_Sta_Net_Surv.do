@@ -9,6 +9,9 @@
 
 ssc install stns
 which stns
+ssc install eclplot
+which ecloplot
+
 //I Data consistency and setting time
 //Setting your path and working directory
 clear
