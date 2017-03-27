@@ -237,3 +237,5 @@ eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) 
 
 log close
 rm ASNetPeriod_1981-1985.dta
+
+//Thank YOU! So, Beautiful is Granada, isn't it?

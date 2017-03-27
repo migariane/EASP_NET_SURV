@@ -106,8 +106,6 @@ twoway (connected survival year, sort msymbol(none)), ///
 	xtitle("Years since diagnosis") 
 rm period.dta
 restore
-webdoc graph, caption(Figure 1.Five Years Net Survival for the Cohort of Breast Cancer 1971) cabove ///
-width(1000)	
 
 /***
 Net Survival for the cohort of cancer incident cases diagnosed in 1971 and followed-up for 5 years
@@ -225,3 +223,5 @@ eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) 
 
 log close
 rm ASNetcohort_1971.dta
+
+//THANK YOU!!! SO, BEAUTIFUL IS GRANADA! ISN'T IT?
