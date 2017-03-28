@@ -99,8 +99,8 @@ label var agegr "5-band age groups for standardisation"
 <p>SETTING time for the five-year calendar PERIOD time 1981-1985 (note the ORIGIN, ENTRY and EXIT options)</br>
 Understanding your approach: note _t0 is not 0 as before in the cohort analysis</br>
 ORIGIN(time diagmdy): you are setting the date of cancer diagnosis as the <font color="blue">ANALYSIS TIME</font></br>
-ENTER(time mdy(1,1,1980): the <font color="blue">ONSET RISK</font> start a the date specified by the user</br>
-EXIT(time mdy(12,31,1984): the exact date when subjects exit from the analysis <font color="blue">STOP COUNTING person-time at risk</font></p>
+ENTER(time mdy(1,1,1981): the <font color="blue">ONSET RISK</font> start a the date specified by the user</br>
+EXIT(time mdy(12,31,1985): the exact date when subjects exit from the analysis <font color="blue">STOP COUNTING person-time at risk</font></p>
 ***/
 stset finmdy, fail(dead==1) origin(time diagmdy) enter(time mdy(1, 1, 1981)) exit(time mdy(12, 31, 1985))
 sort year
@@ -137,7 +137,7 @@ Our focus in the analysis is just five-year calendar period</p>
 preserve
 keep if _st==1
 list diagmdy finmdy _t0 _t _d _st year in 1/10 if year==1971
-display 5046-3220
+display 5184-3359
 display %2.0f 365.24*5
 restore
 

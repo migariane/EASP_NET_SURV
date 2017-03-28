@@ -129,22 +129,26 @@ label var agediagindays  "Age at diagnosis in days for Net Survival estimation"
 list diagmdy finmdy _t0 _t _d _st agediag agediagindays in 1/10
 
 /***
-<p>Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis</p>
+<p>Net Survival Estimates at 1, 2, 3, 4, and 5 years after diagnosis</p>
 ***/
 stns list using lifetable_stns.dta if year(diagmdy)==1971, ///
 	age(agediagindays=_age) period(diagmdy=yearindays) ///
 	strata(dep) rate(rate_day) ///
-	at(1/4 5(5)10, scalefactor(365.25) unit(year)) end_followup(3625.5)	///	
-	saving(period, replace)
-preserve
+	at(1/4 5, scalefactor(365.25) unit(year)) end_followup(3625.5)	///	
+	saving(cohort, replace)
+/***	
+<p>Ploting net surival estimates</p>
+***/	
+preserve //Preserve data to plot ten-years net survival
 clear
-use period
+use cohort
+drop if time > 1826.25 //Keep just five-year net survival estimates
 gen year=time/365.25
 twoway (connected survival year, sort msymbol(none)), ///
 	yscale(range(0 1)) ylabel(0(.2)1, labels angle(horizontal) format(%9.1g)) ///
-	ytitle("Net survival") xscale(range(0 10)) xlabel(, val angle(horizontal)) ///
+	ytitle("Net survival") xscale(range(0 5)) xlabel(, val angle(horizontal)) ///
 	xtitle("Years since diagnosis") 
-rm period.dta
+rm cohort.dta
 restore
 webdoc graph, caption(Figure 1.Five Years Net Survival for the Cohort of Breast Cancer 1971) cabove ///
 width(1000)	
@@ -257,4 +261,3 @@ width(1000)
 ***/
 webdoc close
 rm ASNetcohort_1971.dta
-//webdoc do Webdoc_Cohort_Age_Sta_Net_Surv.do

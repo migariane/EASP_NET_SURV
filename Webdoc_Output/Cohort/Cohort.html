@@ -401,12 +401,12 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
  10. | <span class="stres">01sep1999   01oct2003     0   1491    1     1   82.03423      29963 </span>|
      +---------------------------------------------------------------------+
 </samp></pre>
-<p>Net Survival Estimates at 1, 2, 3, 4, 5, and 10 years after diagnosis</p>
+<p>Net Survival Estimates at 1, 2, 3, 4, and 5 years after diagnosis</p>
 <pre id="stlog-11" class="stlog"><samp><span class="stinp">. stns list using lifetable_stns.dta if year(diagmdy)==1971, <span class="stcmt">///</span>
 &gt;         age(agediagindays=_age) period(diagmdy=yearindays) <span class="stcmt">///</span>
 &gt;         strata(dep) rate(rate_day) <span class="stcmt">///</span>
-&gt;         at(1/4 5(5)10, scalefactor(365.25) unit(year)) end_followup(3625.5)     <span class="stcmt">///     </span>
-&gt;         saving(period, replace)</span>
+&gt;         at(1/4 5, scalefactor(365.25) unit(year)) end_followup(3625.5)  <span class="stcmt">///     </span>
+&gt;         saving(cohort, replace)</span>
 <span class="stres">type of estimate: kaplan-meier</span>
 
 <span class="stres">         </span>failure _d:  <span class="stres">dead == 1</span>
@@ -422,29 +422,32 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
          3    1095 <span class="stres">    4017      575        4               0.6102     0.5966    0.6239 </span>
          4    1461 <span class="stres">    3438      423        2               0.5478     0.5335    0.5621 </span>
          5    1826 <span class="stres">    3013      334        0               0.4992     0.4844    0.5139 </span>
-        10  3625.5 <span class="stres">    2679     1018     1661               0.3493     0.3315    0.3672 </span>
 ---------------------------------------------------------------------------------------
-
-<span class="stinp">. preserve</span>
+</samp></pre>
+<p>Ploting net surival estimates</p>
+<pre id="stlog-12" class="stlog"><samp><span class="stinp">. preserve <span class="stcmt">//Preserve data to plot ten-years net survival</span></span>
 
 <span class="stinp">. clear</span>
 
-<span class="stinp">. use period</span>
+<span class="stinp">. use cohort</span>
+
+<span class="stinp">. drop if time &gt; 1826.25 <span class="stcmt">//Keep just five-year net survival estimates</span></span>
+(767 observations deleted)
 
 <span class="stinp">. gen year=time/365.25</span>
 
 <span class="stinp">. twoway (connected survival year, sort msymbol(none)), <span class="stcmt">///</span>
 &gt;         yscale(range(0 1)) ylabel(0(.2)1, labels angle(horizontal) format(%9.1g)) <span class="stcmt">///</span>
-&gt;         ytitle("Net survival") xscale(range(0 10)) xlabel(, val angle(horizontal)) <span class="stcmt">///</span>
+&gt;         ytitle("Net survival") xscale(range(0 5)) xlabel(, val angle(horizontal)) <span class="stcmt">///</span>
 &gt;         xtitle("Years since diagnosis") </span>
 
-<span class="stinp">. rm period.dta</span>
+<span class="stinp">. rm cohort.dta</span>
 
 <span class="stinp">. restore</span>
 </samp></pre>
-<figure id="fig-11">
+<figure id="fig-12">
 <figcaption>Figure 1.Five Years Net Survival for the Cohort of Breast Cancer 1971</figcaption>
-<a href="Cohort_11.png"><img alt="Cohort_11.png" src="Cohort_11.png"/></a>
+<a href="Cohort_12.png"><img alt="Cohort_12.png" src="Cohort_12.png"/></a>
 </figure>
 <p>Net Survival for the cohort of cancer incident cases diagnosed in 1971 and followed-up for 5 years</p>
 <p>All what you have to know about STNS:</br>
@@ -456,7 +459,7 @@ obs. time interval:  <span class="stres">(origin, finmdy]</span>
 6. For display end_follow up (in days) and by (agegr dep)</br>
 7. saving option (really important!)</br>
 8. Please: read carefully the Stata stns help file and the Stata <a href="http://www.stata-journal.com/article.html?article=st0326">Journal article</a></p>
-<pre id="stlog-12" class="stlog"><samp><span class="stinp">. stns list using lifetable_stns.dta if year(diagmdy)==1971, <span class="stcmt">///</span>
+<pre id="stlog-13" class="stlog"><samp><span class="stinp">. stns list using lifetable_stns.dta if year(diagmdy)==1971, <span class="stcmt">///</span>
 &gt;         age(agediagindays=_age) period(diagmdy=yearindays) <span class="stcmt">///</span>
 &gt;         strata(dep) rate(rate_day) <span class="stcmt">///</span>
 &gt;         at(1 2 3 4 5, scalefactor(365.25) unit(year)) end_followup(5480) by(agegr dep) <span class="stcmt">///</span>
@@ -624,7 +627,7 @@ agegr=5 Most deprived
 ---------------------------------------------------------------------------------------
 </samp></pre>
 <p>Loading Net Survival estimates and checking consistency</p>
-<pre id="stlog-13" class="stlog"><samp><span class="stinp">. clear </span>
+<pre id="stlog-14" class="stlog"><samp><span class="stinp">. clear </span>
 
 <span class="stinp">. use ASNetcohort_1971.dta</span>
 ((All Cases 1971-2001, final datasets))
@@ -638,11 +641,11 @@ agegr=5 Most deprived
       +------+
 </samp></pre>
 <p>Undesrtanding the results derived from STNS Stata command</p>
-<pre id="stlog-14" class="stlog"><samp><span class="stinp">. describe</span>
+<pre id="stlog-15" class="stlog"><samp><span class="stinp">. describe</span>
 
 Contains data from <span class="stres">ASNetcohort_1971.dta</span>
   obs:<span class="stres">         4,677                          (All Cases 1971-2001, final datasets)</span>
- vars:<span class="stres">            20                          27 Mar 2017 11:19</span>
+ vars:<span class="stres">            20                          28 Mar 2017 15:20</span>
  size:<span class="stres">       612,687                          </span>
 --------------------------------------------------------------------------------------------------------------------
               storage   display    value
@@ -694,7 +697,7 @@ Sorted by: <span class="stres">agegr  dep  time</span>
 <p>Keep results for just five-year Net Survival estimates</p>
 <p>Q: What do you have to make in order to get 10 years survival?</p>
 <p>A: drop if time > ???. Remember: 365.25 x Years (display 365.25*10)
-<pre id="stlog-15" class="stlog"><samp><span class="stinp">. display 365.25*10</span>
+<pre id="stlog-16" class="stlog"><samp><span class="stinp">. display 365.25*10</span>
 <span class="stres">3652.5</span>
 
 <span class="stinp">. display 365.25*5</span>
@@ -711,7 +714,7 @@ Sorted by: <span class="stres">agegr  dep  time</span>
 (Corazziari I, Quinn M, Capocaccia R. Eur J Cancer. 2004; 40: 2307-16. Standard cancer patient population for age standardising survival ratios.)</p>
 <p>Q: Where do you can get the information of the weights for other cancer sites?</p>
 <p>A: Check out the Stata do file provide for the exercise and Corazziari et al. European Journal of Cancer. 2004</p>
-<pre id="stlog-16" class="stlog"><samp><span class="stinp">. gen weight=. </span>
+<pre id="stlog-17" class="stlog"><samp><span class="stinp">. gen weight=. </span>
 (25 missing values generated)
 
 <span class="stinp">. *Standard cancer population one (stomach, colon, rectum, liver, lung, breast, ovary, leukaemia)</span>
@@ -732,7 +735,7 @@ Sorted by: <span class="stres">agegr  dep  time</span>
 </samp></pre>
 <h3>IV) Age-Standardised Net Survival estimation</h3>
 <p>Weighted NET SURVIVAL estimate: from Corazziari et al. European Journal of Cancer. 2004</p>
-<pre id="stlog-17" class="stlog"><samp><span class="stinp">. bysort <span class="stcmt">/*insert relevant variables*/</span> dep (agegr): gen s1ASN = (surv*weight)</span>
+<pre id="stlog-18" class="stlog"><samp><span class="stinp">. bysort <span class="stcmt">/*insert relevant variables*/</span> dep (agegr): gen s1ASN = (surv*weight)</span>
 
 <span class="stinp">. list agegr dep surv weight s1ASN</span>
 
@@ -815,7 +818,7 @@ Sorted by: <span class="stres">agegr  dep  time</span>
 <h3>V) Age-Standardised Net Survival Statistical Inference</h3>
 <p>Weighted STANDARD ERROR of the net survival estimate. The formula for the the standard error for net survival (se_ns) is derived from the DELTA METHOD
 based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
-<pre id="stlog-18" class="stlog"><samp><span class="stinp">. gen ns=exp(-cum_hazard) <span class="stcmt">//using the Delta method we ned the cummulative hazard H(t).</span></span>
+<pre id="stlog-19" class="stlog"><samp><span class="stinp">. gen ns=exp(-cum_hazard) <span class="stcmt">//using the Delta method we ned the cummulative hazard H(t).</span></span>
 
 <span class="stinp">. corr ns surv <span class="stcmt">//checking consistency</span></span>
 (obs=25)
@@ -836,12 +839,12 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 (20 observations deleted)
 </samp></pre>
 <p>95%CIs from Corazziari et al. European Journal of Cancer. 2004 and Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
-<pre id="stlog-19" class="stlog"><samp><span class="stinp">. gen L95CI=(ASNS/exp(1.96*seASN/ASNS))</span>
+<pre id="stlog-20" class="stlog"><samp><span class="stinp">. gen L95CI=(ASNS/exp(1.96*seASN/ASNS))</span>
 
 <span class="stinp">. gen U95CI=(ASNS*exp(1.96*seASN/ASNS))</span>
 </samp></pre>
 <h3>VI) Age-standardised Five-year Net Survival by Deprivation, for the Cohort 1971</h3>
-<pre id="stlog-20" class="stlog"><samp><span class="stinp">. list dep survival ASNS L95CI U95CI </span>
+<pre id="stlog-21" class="stlog"><samp><span class="stinp">. list dep survival ASNS L95CI U95CI </span>
 
      +------------------------------------------------------------+
      | <span class="stres">          dep    survival       ASNS      L95CI      U95CI </span>|
@@ -856,9 +859,9 @@ based on Clayton and Hills. Statistical Models in Epidemiology, 1993</p>
 <span class="stinp">. eclplot ASNS L95CI U95CI dep, hori estopts(msize(vlarge)) ciopts(msize(vlarge)) yscale(range(1 6)) xline(0,lpatter
 &gt; n(dot)) xtitle("Age-Standardised Net Survival")</span>
 </samp></pre>
-<figure id="fig-20">
+<figure id="fig-21">
 <figcaption>Figure 2. Age-Standardised Five-year Net Survival for the Breast Cancer Cohort of 1971</figcaption>
-<a href="Cohort_20.png"><img alt="Cohort_20.png" src="Cohort_20.png"/></a>
+<a href="Cohort_21.png"><img alt="Cohort_21.png" src="Cohort_21.png"/></a>
 </figure>
 
 <h3><font color="blue">THANK YOU FOR YOUR ATTENTION</font></h3>

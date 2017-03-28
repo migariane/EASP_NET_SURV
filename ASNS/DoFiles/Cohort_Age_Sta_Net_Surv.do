@@ -24,7 +24,6 @@ capture log using "Cohort.log"
 Loading the data
 ***/ 
 use breast_stns.dta, clear
-set more off
 //browse
 
 /***
