@@ -17,8 +17,6 @@ We will also show illustrations for short-term and long-term survival prediction
 # Cite
 
 
-[![DOI](https://zenodo.org/badge/86184614.svg)](https://zenodo.org/badge/latestdoi/86184614)
-
 
 # Suggestions for further reading  
 
