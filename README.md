@@ -16,7 +16,7 @@ its use for deriving cancer survival estimates for patients recently diagnosed w
 We will also show illustrations for short-term and long-term survival prediction obtained by modelling the effect of year of diagnosis.
 # Cite
 
-[![DOI](https://zenodo.org/badge/86184614.svg)](https://zenodo.org/badge/latestdoi/86184614)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.2560811.svg)](https://doi.org/10.5281/zenodo.2560811)
 
 # Suggestions for further reading  
 
