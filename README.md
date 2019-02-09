@@ -1,19 +1,24 @@
 # Cancer survival 27-28 March – 2017  
 ## EASP-GRANADA  
-## Age-Standardised Net Survival: Cohort and period analysis for population-based cancer epidemiology  
+## Age-Standardized Net Survival: Cohort and period analysis for population-based cancer epidemiology  
 
 Event rates often differ widely with age, and comparison of overall (all‐ages) rates between two or more populations can be misleading
-if the age structure of the populations is also very different. Age standardisation is designed to produce an overall summary measure
-for each population while removing the effect of differences in age structure that may compromise the comparison of raw (not age‐standardised) rates.  
+if the age structure of the populations is also very different. Age standardization is designed to produce an overall summary measure
+for each population while removing the effect of differences in age structure that may compromise the comparison of raw (not age‐standardized) rates.  
  
-In this session, we will introduce the principle of age standardisation and explain how an age-standardised survival value can be calculated.
-Limitations of the age‐standardisation method and the choice of age‐specific standard weights will be discussed.   
+In this session, we will introduce the principle of age standardization and explain how an age-standardized survival value can be calculated.
+Limitations of the age‐standardization method and the choice of age‐specific standard weights will be discussed.   
 
 Monitoring of cancer survival should be as up-to-date as possible. Twenty years ago, the principle of period analysis was introduced for deriving 
 long-term cancer survival estimates for cancer patients recently diagnosed. After thorough empirical evaluation and development of user-friendly
 software, period analysis has become increasingly popular in recent years. The principle of period analysis will be outlined, and we will illustrate
 its use for deriving cancer survival estimates for patients recently diagnosed with a cancer. Furthermore, the cohort analysis will be presented too.
-We will also show illustrations for short-term and long-term survival prediction obtained by modelling the effect of year of diagnosis.  
+We will also show illustrations for short-term and long-term survival prediction obtained by modelling the effect of year of diagnosis.
+# Cite
+
+
+[![DOI](https://zenodo.org/badge/86184614.svg)](https://zenodo.org/badge/latestdoi/86184614)
+  
 
 # Suggestions for further reading  
 
